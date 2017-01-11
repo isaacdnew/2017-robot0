@@ -1,4 +1,4 @@
-package org.usfirst.frc.team6300.robot.commands;
+ package org.usfirst.frc.team6300.robot.commands;
 
 import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.Robot;
@@ -23,7 +23,7 @@ public class Mecanum extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.driveTrain.drive(OI.driveJoy, 0, 1, 2);
+		Robot.driveTrain.drive(OI.driveJoy, 1, 0, 4);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

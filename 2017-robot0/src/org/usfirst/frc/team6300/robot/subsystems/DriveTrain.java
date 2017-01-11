@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
+import org.usfirst.frc.team6300.robot.commands.Mecanum;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Joystick;
@@ -37,6 +38,10 @@ public class DriveTrain extends Subsystem {
 		
 		gyro = new AnalogGyro(RobotMap.gyro);
 	}
+	
+	public void initDefaultCommand() {
+        setDefaultCommand(new Mecanum());
+    }
 	
 	public void brake() {;
 		leftFrontMotor.stopMotor();
@@ -92,10 +97,10 @@ public class DriveTrain extends Subsystem {
 		/**
 		 * slide axis:
 		 */
-		//make wheels spin away from each other if the axis is positive:
-		lfSpeed = lfSpeed + slideSpeed;
+		lfSpeed = lfSpeed - slideSpeed;
+		lbSpeed = lbSpeed + slideSpeed;
+		
 		rfSpeed = rfSpeed + slideSpeed;
-		lbSpeed = lbSpeed - slideSpeed;
 		rbSpeed = rbSpeed - slideSpeed;
 		
 		/**
@@ -113,9 +118,5 @@ public class DriveTrain extends Subsystem {
 		Timer.delay(0.01);
 	}
 	
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
-    }
 }
 
