@@ -4,7 +4,7 @@ import org.usfirst.frc.team6300.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -25,10 +25,10 @@ public class DriveTrain extends Subsystem {
 	private double targetHeading = 0;
     	
 	public DriveTrain() {
-		leftFrontMotor = new Spark(RobotMap.leftFrontMotor);
-		rightFrontMotor = new Spark(RobotMap.leftFrontMotor);
-		leftBackMotor = new Spark(RobotMap.leftFrontMotor);
-		rightBackMotor = new Spark(RobotMap.leftFrontMotor);
+		leftFrontMotor = new VictorSP(RobotMap.leftFrontMotor);
+		rightFrontMotor = new VictorSP(RobotMap.leftFrontMotor);
+		leftBackMotor = new VictorSP(RobotMap.leftFrontMotor);
+		rightBackMotor = new VictorSP(RobotMap.leftFrontMotor);
 		
 		leftFrontMotor.setInverted(RobotMap.lfInverted);
 		rightFrontMotor.setInverted(RobotMap.rfInverted);
