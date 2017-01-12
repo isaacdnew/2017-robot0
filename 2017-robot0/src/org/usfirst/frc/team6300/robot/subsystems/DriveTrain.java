@@ -153,7 +153,7 @@ public class DriveTrain extends Subsystem {
 		brake();
 	}
 	
-	public void slide(double power, boolean toRight) {
+	public void slide(double targetHeading, double power, boolean toRight) {
 		
 	}
 }
