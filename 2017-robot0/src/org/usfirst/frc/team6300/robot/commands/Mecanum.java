@@ -17,13 +17,13 @@ public class Mecanum extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.driveTrain.calibrateGyro();
+		Robot.driveTrain.calibrateHeading();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.driveTrain.drive(OI.driveJoy, 1, 0, 4);
+		Robot.driveTrain.teleDrive(OI.driveJoy, 1, 0, 4, 0.5);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -35,11 +35,13 @@ public class Mecanum extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+		Robot.driveTrain.coast();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+		Robot.driveTrain.coast();
 	}
 }

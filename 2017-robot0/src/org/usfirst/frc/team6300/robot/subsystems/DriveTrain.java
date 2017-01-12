@@ -1,7 +1,6 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.Mecanum;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,7 +39,7 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-        setDefaultCommand(new Mecanum());
+		
     }
 	
 	public void brake() {;
@@ -57,41 +56,47 @@ public class DriveTrain extends Subsystem {
 		rightBackMotor.set(0);
 	}
 	
-	public void calibrateGyro() {
+	public void calibrateHeading() {
 		brake();
 		gyro.calibrate();
 		targetHeading = 0;
 	}
 	
 	
-	public void drive(Joystick joy, int forwardAxis, int slideAxis, int rotationAxis) {
-		double forwardSpeed = joy.getRawAxis(forwardAxis);
-		double slideSpeed = joy.getRawAxis(slideAxis);
-		double rotationSpeed = joy.getRawAxis(rotationAxis);
+	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotationAxis, double power) {
+		if (power > 1) 
+			power = 1;
+		
+		else if (power <= 0)
+			power = 0;
+		
+		double forwardSpeed = joy.getRawAxis(forwardAxis) * power;
+		double slideSpeed = joy.getRawAxis(slideAxis) * power;
+		double rotationSpeed = joy.getRawAxis(rotationAxis) * power;
 		
 		/**
 		 * yaw correction:
 		 */
-		targetHeading = gyro.getAngle() + rotationSpeed;
+		targetHeading = targetHeading + rotationSpeed;
 		SmartDashboard.putNumber("Target Heading", targetHeading);
 		
 		if (targetHeading > gyro.getAngle()) {
 			//add speed to right side
-			rfSpeed = rfSpeed + 0.1;
-			rbSpeed = rbSpeed + 0.1;
+			rfSpeed = rfSpeed + (power / 10);
+			rbSpeed = rbSpeed + (power / 10);
 			
 			//decrease speed on left side
-			lfSpeed = lfSpeed - 0.1;
-			lbSpeed = lbSpeed - 0.1;
+			lfSpeed = lfSpeed - (power / 10);
+			lbSpeed = lbSpeed - (power / 10);
 		}
 		else if (targetHeading < gyro.getAngle()) {
 			//decrease speed on right side
-			rfSpeed = rfSpeed - 0.1;
-			rbSpeed = rbSpeed - 0.1;
+			rfSpeed = rfSpeed - (power / 10);
+			rbSpeed = rbSpeed - (power / 10);
 			
 			//increase speed on left side
-			lfSpeed = lfSpeed + 0.1;
-			lbSpeed = lbSpeed + 0.1;
+			lfSpeed = lfSpeed + (power / 10);
+			lbSpeed = lbSpeed + (power / 10);
 		}
 		
 		/**
@@ -118,5 +123,29 @@ public class DriveTrain extends Subsystem {
 		Timer.delay(0.01);
 	}
 	
+	public void autoDrive(double targetHeading, double power, double seconds) {
+		/**
+		 * turn to heading:
+		 */
+		while (targetHeading != gyro.getAngle()) {
+			if (targetHeading > gyro.getAngle()) {
+				leftFrontMotor.set(power);
+				rightFrontMotor.set(-power);
+				leftBackMotor.set(power);
+				rightBackMotor.set(-power);
+			}
+			else {
+				leftFrontMotor.set(-power);
+				rightFrontMotor.set(power);
+				leftBackMotor.set(-power);
+				rightBackMotor.set(power);
+			}
+		}
+		brake();
+		
+		/**
+		 * 
+		 */
+	}
 }
 
