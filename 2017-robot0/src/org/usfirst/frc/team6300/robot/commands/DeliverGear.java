@@ -4,9 +4,6 @@ import org.usfirst.frc.team6300.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
 public class DeliverGear extends Command {
 	public DeliverGear() {
 		// Use requires() here to declare subsystem dependencies

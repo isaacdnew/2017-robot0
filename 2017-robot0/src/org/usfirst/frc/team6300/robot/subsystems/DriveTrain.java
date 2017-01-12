@@ -39,7 +39,6 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		
     }
 	
 	public void brake() {;
@@ -144,8 +143,14 @@ public class DriveTrain extends Subsystem {
 		brake();
 		
 		/**
-		 * 
+		 * go forward at "power" for "seconds" seconds
 		 */
+		leftFrontMotor.set(power);
+		rightFrontMotor.set(power);
+		leftBackMotor.set(power);
+		rightBackMotor.set(power);
+		Timer.delay(seconds);
+		brake();
 	}
 }
 
