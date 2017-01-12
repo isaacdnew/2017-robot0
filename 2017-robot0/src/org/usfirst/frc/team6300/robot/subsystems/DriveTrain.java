@@ -152,5 +152,9 @@ public class DriveTrain extends Subsystem {
 		Timer.delay(seconds);
 		brake();
 	}
+	
+	public void slide(double power, boolean toRight) {
+		
+	}
 }
 
