@@ -23,6 +23,11 @@ public class RobotMap {
 	public static int gyro = 0;
 	
 	/**
+	 * gear dropper:
+	 */
+	public static int servo = 4;
+	
+	/**
 	 * joysticks:
 	 */
 	public static int driveJoy = 0;

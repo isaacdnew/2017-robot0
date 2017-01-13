@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6300.robot.commands.DeliverGear;
 import org.usfirst.frc.team6300.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team6300.robot.subsystems.GearDropper;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,6 +22,7 @@ import org.usfirst.frc.team6300.robot.subsystems.DriveTrain;
 public class Robot extends IterativeRobot {
 	
 	public static final DriveTrain driveTrain = new DriveTrain();
+	public static final GearDropper gearDropper = new GearDropper();
 	public static OI oi;
 
 	Command autonomousCommand;
@@ -46,6 +48,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		driveTrain.coast();
+		gearDropper.close();
 	}
 
 	@Override

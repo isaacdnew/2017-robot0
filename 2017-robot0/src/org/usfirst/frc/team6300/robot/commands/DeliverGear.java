@@ -31,6 +31,7 @@ public class DeliverGear extends Command {
 	protected void end() {
 		Robot.driveTrain.autoDrive(0, 1, 3);
 		Robot.driveTrain.autoDrive(-90, 1, 1);
+		Robot.gearDropper.dropGear();
 	}
 
 	// Called when another command which requires one or more of the same
