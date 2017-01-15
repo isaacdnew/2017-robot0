@@ -22,6 +22,9 @@ public class DriveTrain extends PIDSubsystem {
 	
 	private static Gyro gyro;
 	
+	double targetHeading = 0;
+	double speedDifference;
+	
 	public DriveTrain() {
 		super("DriveTrain", 0, 0, 0);
 		lfMotor = new VictorSP(RobotMap.lfMotor);
@@ -48,10 +51,10 @@ public class DriveTrain extends PIDSubsystem {
 	}
 	
 	protected void usePIDOutput(double output) {
-		lfSpeed = -output;
-		rfSpeed = output;
-		lbSpeed = -output;
-		rbSpeed = output;
+		lfSpeed = output;
+		rfSpeed = -output;
+		lbSpeed = output;
+		rbSpeed = -output;
 	}
 	
 	public void calibrateHeading() {
@@ -80,10 +83,32 @@ public class DriveTrain extends PIDSubsystem {
 		lbMotor.set(0);
 		rbMotor.set(0);
 	}
-	
+	/**
+	 * @param joy
+	 * @param throttleAxis
+	 * @param slideAxis
+	 * @param turnAxis
+	 */
 	public void teleDrive(Joystick joy, int throttleAxis, int slideAxis, int turnAxis) {
-		double targetHeading;
+		//calculate the speed difference between the two sides using the pid controller and turn axis
+		targetHeading = targetHeading + joy.getRawAxis(turnAxis);
+		enable();
+		setSetpoint(targetHeading);
 		
+		//add the throttle axis
+		lfSpeed = lfSpeed + joy.getRawAxis(throttleAxis);
+		rfSpeed = rfSpeed + joy.getRawAxis(throttleAxis);
+		lbSpeed = lbSpeed + joy.getRawAxis(throttleAxis);
+		rbSpeed = rbSpeed + joy.getRawAxis(throttleAxis);
+		
+		
+		//add the slide axis
+		lfSpeed = lfSpeed + joy.getRawAxis(slideAxis);
+		rfSpeed = rfSpeed - joy.getRawAxis(slideAxis);
+		lbSpeed = lbSpeed - joy.getRawAxis(slideAxis);
+		rbSpeed = rbSpeed + joy.getRawAxis(slideAxis);
+		
+		updateMotors();
 	}
 	
 	public void autoDrive(double targetHeading, double power, double seconds) {
