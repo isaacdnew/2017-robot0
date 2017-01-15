@@ -30,12 +30,8 @@ public class PidTest extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.driveTrain.setSetpoint(45);
-    	while (!Robot.driveTrain.onTarget()) {
-    		Timer.delay(0.05);
-    		Robot.driveTrain.updateMotors();
-    		SmartDashboard.putNumber("Heading", Robot.driveTrain.getPosition());
-    	}
+    	Robot.driveTrain.calibrateHeading();
+    	Robot.driveTrain.testDrive(45, 0.25, 0.5, false);
     }
 
     // Called when another command which requires one or more of the same

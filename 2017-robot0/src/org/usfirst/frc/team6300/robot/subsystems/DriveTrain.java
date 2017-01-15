@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -23,7 +24,7 @@ public class DriveTrain extends PIDSubsystem {
 	private static Gyro gyro;
 	
 	double targetHeading = 0;
-	double speedDifference;
+	double pidOutput = 0;
 	
 	public DriveTrain() {
 		super("DriveTrain", 0, 0, 0);
@@ -34,10 +35,6 @@ public class DriveTrain extends PIDSubsystem {
 		
 		gyro = new AnalogGyro(RobotMap.gyro);
 		
-		// Use these to get going:
-		// setSetpoint() -  Sets where the PID controller should move the system
-		//                  to
-		// enable() - Enables the PID controller.
 		getPIDController().setContinuous(true);
 		setInputRange(0, 360);
 		setAbsoluteTolerance(0.05);
@@ -51,10 +48,13 @@ public class DriveTrain extends PIDSubsystem {
 	}
 	
 	protected void usePIDOutput(double output) {
-		lfSpeed = output;
-		rfSpeed = -output;
-		lbSpeed = output;
-		rbSpeed = -output;
+		pidOutput = output;
+	}
+	
+	@Override
+	public void disable() {
+		super.disable();
+		pidOutput = 0;
 	}
 	
 	public void calibrateHeading() {
@@ -90,35 +90,81 @@ public class DriveTrain extends PIDSubsystem {
 	 * @param turnAxis
 	 */
 	public void teleDrive(Joystick joy, int throttleAxis, int slideAxis, int turnAxis) {
-		//calculate the speed difference between the two sides using the pid controller and turn axis
-		targetHeading = targetHeading + joy.getRawAxis(turnAxis);
-		enable();
-		setSetpoint(targetHeading);
-		
-		//add the throttle axis
-		lfSpeed = lfSpeed + joy.getRawAxis(throttleAxis);
-		rfSpeed = rfSpeed + joy.getRawAxis(throttleAxis);
-		lbSpeed = lbSpeed + joy.getRawAxis(throttleAxis);
-		rbSpeed = rbSpeed + joy.getRawAxis(throttleAxis);
-		
+		//set speed to throttle axis
+		lfSpeed = joy.getRawAxis(throttleAxis);
+		rfSpeed = joy.getRawAxis(throttleAxis);
+		lbSpeed = joy.getRawAxis(throttleAxis);
+		rbSpeed = joy.getRawAxis(throttleAxis);
 		
 		//add the slide axis
-		lfSpeed = lfSpeed + joy.getRawAxis(slideAxis);
-		rfSpeed = rfSpeed - joy.getRawAxis(slideAxis);
-		lbSpeed = lbSpeed - joy.getRawAxis(slideAxis);
-		rbSpeed = rbSpeed + joy.getRawAxis(slideAxis);
+		lfSpeed += joy.getRawAxis(slideAxis);
+		rfSpeed -= joy.getRawAxis(slideAxis);
+		lbSpeed -= joy.getRawAxis(slideAxis);
+		rbSpeed += joy.getRawAxis(slideAxis);
+		
+		//add the turn axis
+		enable();
+		setSetpoint(targetHeading + turnAxis);
+		lfSpeed += pidOutput;
+		rfSpeed -= pidOutput;
+		lbSpeed += pidOutput;
+		rbSpeed -= pidOutput;
 		
 		updateMotors();
 	}
-	
-	public void autoDrive(double targetHeading, double power, double seconds) {
+	/**
+	 * @param targetHeading The heading to turn to
+	 * @param power The power to drive at after turning
+	 * @param seconds The time to drive after turning
+	 * @param coast If true, the robot coasts whenever it needs the motors to stop. If false, it brakes.
+	 */
+	public void autoDrive(double targetHeading, double power, double seconds, boolean coast) {
 		enable();
 		setSetpoint(targetHeading);
 		while (!onTarget()) {
+			lfSpeed = pidOutput;
+			rfSpeed = -pidOutput;
+			lbSpeed = pidOutput;
+			rbSpeed = -pidOutput;
 			updateMotors();
+			
 			Timer.delay(0.05);
 		}
-		//brake();
-		//set motors to power
+		if (coast) coast();
+		else brake();
+		
+		lfMotor.set(power);
+		lfMotor.set(power);
+		lfMotor.set(power);
+		lfMotor.set(power);
+		Timer.delay(seconds);
+		
+		if (coast) coast();
+		else brake();
+	}
+	public void testDrive(double targetHeading, double power, double seconds, boolean coast) {
+		enable();
+		setSetpoint(targetHeading);
+		while (!onTarget()) {
+			lfSpeed = pidOutput;
+			rfSpeed = -pidOutput;
+			lbSpeed = pidOutput;
+			rbSpeed = -pidOutput;
+			updateMotors();
+			SmartDashboard.putNumber("Heading:", getPosition());
+			
+			Timer.delay(0.05);
+		}
+		if (coast) coast();
+		else brake();
+		
+		lfMotor.set(power);
+		lfMotor.set(power);
+		lfMotor.set(power);
+		lfMotor.set(power);
+		Timer.delay(seconds);
+		
+		if (coast) coast();
+		else brake();
 	}
 }
