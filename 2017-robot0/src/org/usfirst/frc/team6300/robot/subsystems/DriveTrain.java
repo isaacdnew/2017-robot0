@@ -142,6 +142,13 @@ public class DriveTrain extends PIDSubsystem {
 		if (coast) coast();
 		else brake();
 	}
+	
+	/**
+	 * @param targetHeading The heading to turn to
+	 * @param power The power to drive at after turning
+	 * @param seconds The time to drive after turning
+	 * @param coast If true, the robot coasts whenever it needs the motors to stop. If false, it brakes.
+	 */
 	public void testDrive(double targetHeading, double power, double seconds, boolean coast) {
 		enable();
 		setSetpoint(targetHeading);
