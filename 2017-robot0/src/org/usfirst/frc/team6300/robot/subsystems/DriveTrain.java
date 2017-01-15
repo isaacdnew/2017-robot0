@@ -118,8 +118,7 @@ public class DriveTrain extends PIDSubsystem {
 			updateMotors();
 			Timer.delay(0.05);
 		}
-		
-		
-		
+		//brake();
+		//set motors to power
 	}
 }
