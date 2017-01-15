@@ -7,29 +7,23 @@ package org.usfirst.frc.team6300.robot;
  * floating around.
  */
 public class RobotMap {
-	/**
-	 * drivetrain:
-	 */
-	public static int leftFrontMotor = 0;
-	public static int rightFrontMotor = 1;
-	public static int leftBackMotor = 2;
-	public static int rightBackMotor = 3;
+	
+	//drivetrain:
+	public static int lfMotor = 0;
+	public static int rfMotor = 1;
+	public static int lbMotor = 2;
+	public static int rbMotor = 3;
 	
 	public static boolean lfInverted = true;
 	public static boolean rfInverted = false;
 	public static boolean lbInverted = true;
 	public static boolean rbInverted = true;
 	
+	//gyro:
 	public static int gyro = 0;
 	
-	/**
-	 * gear dropper:
-	 */
-	public static int servo = 4;
 	
-	/**
-	 * joysticks:
-	 */
+	//joysticks:
 	public static int driveJoy = 0;
 	public static int deliverJoy = 1;
 }

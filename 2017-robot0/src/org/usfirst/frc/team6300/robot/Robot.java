@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		//autoChooser.addDefault("Default", new DeliverGear());
+		//autoChooser.addDefault("Default", new PidTest());
 		// autoChooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Autonomous Program", autoChooser);
 	}
