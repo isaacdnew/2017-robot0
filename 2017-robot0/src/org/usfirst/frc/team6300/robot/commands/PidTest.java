@@ -29,7 +29,7 @@ public class PidTest extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.driveTrain.calibrateHeading();
-    	Robot.driveTrain.testDrive(45, 0.25, 0.5, false);
+    	Robot.driveTrain.testDrive(45);
     }
 
     // Called when another command which requires one or more of the same

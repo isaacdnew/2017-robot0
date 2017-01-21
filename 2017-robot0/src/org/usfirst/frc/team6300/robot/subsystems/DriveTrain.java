@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveTrain extends PIDSubsystem {
+	double loopTime = 0.005;
+	
 	static SpeedController lfMotor, rfMotor, lbMotor, rbMotor;
 	double lfSpeed = 0;
 	double rfSpeed = 0;
@@ -119,6 +121,8 @@ public class DriveTrain extends PIDSubsystem {
 	 * @param coast If true, the robot coasts whenever it needs the motors to stop. If false, it brakes.
 	 */
 	public void autoDrive(double targetHeading, double power, double seconds, boolean coast) {
+		int loopCount = (int) Math.round(seconds / loopTime);
+		
 		enable();
 		setSetpoint(targetHeading);
 		while (!onTarget()) {
@@ -128,16 +132,26 @@ public class DriveTrain extends PIDSubsystem {
 			rbSpeed = -pidOutput;
 			updateMotors();
 			
-			Timer.delay(0.05);
+			Timer.delay(loopTime);
 		}
 		if (coast) coast();
 		else brake();
 		
-		lfMotor.set(power);
-		lfMotor.set(power);
-		lfMotor.set(power);
-		lfMotor.set(power);
-		Timer.delay(seconds);
+		for(int i = 0; i == loopCount; i++) {
+			lfSpeed = pidOutput;
+			rfSpeed = -pidOutput;
+			lbSpeed = pidOutput;
+			rbSpeed = -pidOutput;
+			
+			lfSpeed += power;
+			rfSpeed += power;
+			lbSpeed += power;
+			rbSpeed += power;
+			
+			updateMotors();
+			
+			Timer.delay(loopTime);
+		}
 		
 		if (coast) coast();
 		else brake();
@@ -145,11 +159,8 @@ public class DriveTrain extends PIDSubsystem {
 	
 	/**
 	 * @param targetHeading The heading to turn to
-	 * @param power The power to drive at after turning
-	 * @param seconds The time to drive after turning
-	 * @param coast If true, the robot coasts whenever it needs the motors to stop. If false, it brakes.
 	 */
-	public void testDrive(double targetHeading, double power, double seconds, boolean coast) {
+	public void testDrive(double targetHeading) {
 		enable();
 		setSetpoint(targetHeading);
 		while (!onTarget()) {
@@ -160,18 +171,8 @@ public class DriveTrain extends PIDSubsystem {
 			updateMotors();
 			SmartDashboard.putNumber("Heading:", getPosition());
 			
-			Timer.delay(0.05);
+			Timer.delay(loopTime);
 		}
-		if (coast) coast();
-		else brake();
-		
-		lfMotor.set(power);
-		lfMotor.set(power);
-		lfMotor.set(power);
-		lfMotor.set(power);
-		Timer.delay(seconds);
-		
-		if (coast) coast();
-		else brake();
+		brake();
 	}
 }
