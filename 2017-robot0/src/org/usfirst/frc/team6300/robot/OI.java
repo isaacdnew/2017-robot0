@@ -1,6 +1,10 @@
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.commands.Wiggle;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -8,9 +12,12 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	public static Joystick driveJoy;
+	public static Button wiggleButton;
 	
 	public OI() {
 		driveJoy = new Joystick(RobotMap.driveJoy);
+		wiggleButton = new JoystickButton(driveJoy, 1);
+		wiggleButton.whenReleased(new Wiggle());
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
