@@ -15,19 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveTrain extends PIDSubsystem {
-	private static SpeedController lfMotor, rfMotor, lbMotor, rbMotor;
-	private double lfSpeed = 0;
-	private double rfSpeed = 0;
-	private double lbSpeed = 0;
-	private double rbSpeed = 0;
+	static SpeedController lfMotor, rfMotor, lbMotor, rbMotor;
+	double lfSpeed = 0;
+	double rfSpeed = 0;
+	double lbSpeed = 0;
+	double rbSpeed = 0;
 	
-	private static Gyro gyro;
+	static Gyro gyro;
 	
 	double targetHeading = 0;
 	double pidOutput = 0;
 	
 	public DriveTrain() {
-		super("DriveTrain", 0, 0, 0);
+		super("DriveTrain", 0.025, 0, 0);
 		lfMotor = new VictorSP(RobotMap.lfMotor);
 		rfMotor = new VictorSP(RobotMap.rfMotor);
 		lbMotor = new VictorSP(RobotMap.lbMotor);
