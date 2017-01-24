@@ -23,11 +23,16 @@ public class Wiggle extends Command {
 	
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 	
 	// Called once after isFinished returns true
 	protected void end() {
+		double straight = Robot.driveTrain.getPosition();
+		Robot.driveTrain.autoDrive(straight - 15, 0, 0, false);
+		Robot.driveTrain.autoDrive(straight + 15, 0, 0, false);
+		Robot.driveTrain.autoDrive(straight - 15, 0, 0, false);
+		Robot.driveTrain.autoDrive(straight + 15, 0, 0, false);
 	}
 	
 	// Called when another command which requires one or more of the same

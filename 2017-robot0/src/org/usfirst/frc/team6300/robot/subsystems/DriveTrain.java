@@ -2,7 +2,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -35,10 +35,10 @@ public class DriveTrain extends PIDSubsystem {
 		lbMotor = new VictorSP(RobotMap.lbMotor);
 		rbMotor = new VictorSP(RobotMap.rbMotor);
 		
-		gyro = new AnalogGyro(RobotMap.gyro);
+		gyro = new ADXRS450_Gyro();
 		
-		getPIDController().setContinuous(true);
 		setInputRange(0, 360);
+		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(0.05);
 	}
 	
@@ -73,6 +73,7 @@ public class DriveTrain extends PIDSubsystem {
 	}
 	
 	public void brake() {
+		disable();
 		lfMotor.stopMotor();
 		rfMotor.stopMotor();
 		lbMotor.stopMotor();
@@ -80,6 +81,7 @@ public class DriveTrain extends PIDSubsystem {
 	}
 	
 	public void coast() {
+		disable();
 		lfMotor.set(0);
 		rfMotor.set(0);
 		lbMotor.set(0);
@@ -115,6 +117,7 @@ public class DriveTrain extends PIDSubsystem {
 		updateMotors();
 	}
 	/**
+	 * Turns the robot to the target heading, then drives straight.
 	 * @param targetHeading The heading to turn to
 	 * @param power The power to drive at after turning
 	 * @param seconds The time to drive after turning
