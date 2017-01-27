@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Mecanum extends Command {
-	public Mecanum() {
+public class MecanumDrive extends Command {
+	public MecanumDrive() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.driveTrain);
 	}
@@ -17,7 +17,6 @@ public class Mecanum extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.driveTrain.calibrateHeading();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
